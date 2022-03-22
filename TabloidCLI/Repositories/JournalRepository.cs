@@ -20,10 +20,7 @@ namespace TabloidCLI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT id,
-                                               Title,
-                                               Content,
-                                               CreateDateTime
+                    cmd.CommandText = @"SELECT *
                                           FROM Journal";
 
                     List<Journal> journals = new List<Journal>();

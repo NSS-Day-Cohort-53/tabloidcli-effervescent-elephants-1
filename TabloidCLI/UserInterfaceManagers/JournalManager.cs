@@ -29,7 +29,7 @@ namespace TabloidCLI.UserInterfaceManagers
             //Console.WriteLine(" 2) Add Entry");
             //Console.WriteLine(" 3) Edit Entry");
             //Console.WriteLine(" 4) Remove Entry");
-            //Console.WriteLine(" 0) Go Back");
+            Console.WriteLine(" 0) Go Back");
 
             Console.Write("> ");
             string choice = Console.ReadLine();
@@ -60,7 +60,7 @@ namespace TabloidCLI.UserInterfaceManagers
             List<Journal> journals = _journalRepository.GetAll();
             foreach (Journal journal in journals)
             {
-                Console.WriteLine(journal);
+                Console.WriteLine($"{journal.Title} created on {journal.CreateDateTime.ToShortDateString()}");
             }
         }
     }
