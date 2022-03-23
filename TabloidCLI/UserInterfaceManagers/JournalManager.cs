@@ -27,7 +27,7 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine("Journal Menu");
             Console.WriteLine(" 1) List Entries");
             Console.WriteLine(" 2) Add Entry");
-            //Console.WriteLine(" 3) Edit Entry");
+            Console.WriteLine(" 3) Edit Entry");
             //Console.WriteLine(" 4) Remove Entry");
             Console.WriteLine(" 0) Go Back");
 
@@ -41,9 +41,9 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "2":
                     Add();
                     return this;
-                //case "3":
-                //    Edit();
-                //    return this;
+                case "3":
+                    Edit();
+                    return this;
                 //case "4":
                 //    Remove();
                 //    return this;
@@ -64,6 +64,36 @@ namespace TabloidCLI.UserInterfaceManagers
             }
         }
 
+        private Journal Choose(string prompt = null)
+        {
+            if (prompt == null)
+            {
+                prompt = "Please choose a Journal Entry:";
+            }
+
+            Console.WriteLine(prompt);
+
+            List<Journal> journals = _journalRepository.GetAll();
+
+            for (int i = 0; i < journals.Count; i++)
+            {
+                Journal journal = journals[i];
+                Console.WriteLine($" {i + 1}) {journal.Title}");
+            }
+            Console.Write("> ");
+
+            string input = Console.ReadLine();
+            try
+            {
+                int choice = int.Parse(input);
+                return journals[choice - 1];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Invalid Selection");
+                return null;
+            }
+        }
         private void Add()
         {
             Console.WriteLine("New Journal Entry");
@@ -78,6 +108,31 @@ namespace TabloidCLI.UserInterfaceManagers
             journal.CreateDateTime = DateTime.Now;
 
             _journalRepository.Insert(journal);
+        }
+
+        private void Edit()
+        {
+            Journal journalEntryToEdit = Choose("Which journal entry would you like to edit?");
+            if (journalEntryToEdit == null)
+            {
+                return;
+            }
+
+            Console.WriteLine();
+            Console.Write("New Title (blank to leave unchanged): ");
+            string title = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                journalEntryToEdit.Title = title;
+            }
+            Console.Write("New Content (blank to leave unchanged): ");
+            string content = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(content))
+            {
+                journalEntryToEdit.Content = content;
+            
+            }
+            _journalRepository.Update(journalEntryToEdit);
         }
     }
 }
