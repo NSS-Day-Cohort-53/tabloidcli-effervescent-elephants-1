@@ -26,7 +26,7 @@ namespace TabloidCLI.UserInterfaceManagers
         {
             Console.WriteLine("Journal Menu");
             Console.WriteLine(" 1) List Entries");
-            //Console.WriteLine(" 2) Add Entry");
+            Console.WriteLine(" 2) Add Entry");
             //Console.WriteLine(" 3) Edit Entry");
             //Console.WriteLine(" 4) Remove Entry");
             Console.WriteLine(" 0) Go Back");
@@ -38,9 +38,9 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "1":
                     List();
                     return this;
-                //case "2":
-                //    Add();
-                //    return this;
+                case "2":
+                    Add();
+                    return this;
                 //case "3":
                 //    Edit();
                 //    return this;
@@ -62,6 +62,22 @@ namespace TabloidCLI.UserInterfaceManagers
             {
                 Console.WriteLine($"{journal.Title} created on {journal.CreateDateTime.ToShortDateString()}");
             }
+        }
+
+        private void Add()
+        {
+            Console.WriteLine("New Journal Entry");
+            Journal journal = new Journal();
+
+            Console.Write("Title: ");
+            journal.Title = Console.ReadLine();
+
+            Console.Write("Content: ");
+            journal.Content = Console.ReadLine();
+
+            journal.CreateDateTime = DateTime.Now;
+
+            _journalRepository.Insert(journal);
         }
     }
 }
