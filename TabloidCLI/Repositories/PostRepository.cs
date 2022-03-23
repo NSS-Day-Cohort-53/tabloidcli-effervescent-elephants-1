@@ -17,7 +17,7 @@ namespace TabloidCLI.Repositories
 
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT * FROM Post";
+                    cmd.CommandText = @"SELECT Id, Title, PublishDateTime, Url FROM Post";
                     List<Post> posts = new List<Post>();
 
                     SqlDataReader reader = cmd.ExecuteReader();
@@ -29,14 +29,7 @@ namespace TabloidCLI.Repositories
                             Title = reader.GetString(reader.GetOrdinal("Title")),
                             Url = reader.GetString(reader.GetOrdinal("URL")),
                             PublishDateTime = reader.GetDateTime(reader.GetOrdinal("PublishDateTime")),
-                            Blog = new Blog()
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("BlogId"))
-                            },
-                            Author = new Author()
-                            {
-                                Id = reader.GetInt32(reader.GetOrdinal("AuthorId"))
-                            }
+                           
                         };
                         posts.Add(post);
                     }
@@ -112,7 +105,21 @@ namespace TabloidCLI.Repositories
 
         public void Insert(Post post)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Post (Title, Url, PublishDateTime, AuthorId, BlogId)
+                                                    VAULES (@title, @url, @PublishDateTime, @authorId, @blogId)";
+                    cmd.Parameters.AddWithValue("@title", post.Title);
+                    cmd.Parameters.AddWithValue("@url", post.Url);
+                    cmd.Parameters.AddWithValue("@publishDateTime", post.PublishDateTime);
+                    cmd.Parameters.AddWithValue("@authorId", post.Author.Id);
+                    cmd.Parameters.AddWithValue("@blogId", post.Blog.Id);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
         public void Update(Post post)
