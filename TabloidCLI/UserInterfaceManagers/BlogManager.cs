@@ -74,7 +74,7 @@ namespace TabloidCLI.UserInterfaceManagers
             for (int i = 0; i < blogs.Count; i++)
             {
                 Blog blog = blogs[i];
-                Console.WriteLine($" {i + 1}) {blog.Title}");
+                Console.WriteLine($" {i + 1}) {blog.Title} {blog.Url}");
             }
             Console.Write("> ");
 
