@@ -33,9 +33,9 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "1":
                     List();
                     return this;
-                //case "2":
-                //    Add();
-                //    return this;
+                case "2":
+                    Add();
+                    return this;
                 //case "3":
                 //    Edit();
                 //    return this;
@@ -59,10 +59,17 @@ namespace TabloidCLI.UserInterfaceManagers
             }
         }
 
-        //private void Add()
-        //{
-        //    throw new NotImplementedException();
-        //}
+        private void Add()
+        {
+            Console.WriteLine("New Tag");
+            Tag tag = new Tag();
+
+            Console.Write("Name: ");
+            tag.Name = Console.ReadLine();
+
+            _tagRepository.Insert(tag);
+          
+        }
 
         //private void Edit()
         //{
