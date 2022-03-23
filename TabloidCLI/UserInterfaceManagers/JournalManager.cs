@@ -28,7 +28,7 @@ namespace TabloidCLI.UserInterfaceManagers
             Console.WriteLine(" 1) List Entries");
             Console.WriteLine(" 2) Add Entry");
             Console.WriteLine(" 3) Edit Entry");
-            //Console.WriteLine(" 4) Remove Entry");
+            Console.WriteLine(" 4) Remove Entry");
             Console.WriteLine(" 0) Go Back");
 
             Console.Write("> ");
@@ -44,9 +44,9 @@ namespace TabloidCLI.UserInterfaceManagers
                 case "3":
                     Edit();
                     return this;
-                //case "4":
-                //    Remove();
-                //    return this;
+                case "4":
+                    Remove();
+                    return this;
                 case "0":
                     return _parentUI;
                 default:
@@ -133,6 +133,15 @@ namespace TabloidCLI.UserInterfaceManagers
             
             }
             _journalRepository.Update(journalEntryToEdit);
+        }
+
+        private void Remove()
+        {
+            Journal journalEntryToDelete = Choose("Which entry would you like to remove?");
+            if (journalEntryToDelete != null)
+            {
+                _journalRepository.Delete(journalEntryToDelete.Id);
+            }
         }
     }
 }
