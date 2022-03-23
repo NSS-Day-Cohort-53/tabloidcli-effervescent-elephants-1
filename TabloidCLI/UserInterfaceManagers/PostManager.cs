@@ -11,12 +11,14 @@ namespace TabloidCLI.UserInterfaceManagers
         private readonly IUserInterfaceManager _parentUI;
         private PostRepository _postRepository;
         private AuthorRepository _authorRepository;
+        private BlogRepository _blogRepository;
         private string _connectionString;
         public PostManager(IUserInterfaceManager parentUI, string connectionString)
         {
             _parentUI = parentUI;
             _postRepository = new PostRepository(connectionString);
             _authorRepository = new AuthorRepository(connectionString);
+            _blogRepository = new BlogRepository(connectionString);
             _connectionString = connectionString;
         }
         public IUserInterfaceManager Execute()
@@ -96,11 +98,44 @@ namespace TabloidCLI.UserInterfaceManagers
 
             post.Author = ChooseAuthor("Author:");
 
-           // post = ChoosePost("Post:");
+            post.Blog = ChooseBlog("Blog:");
 
             post.PublishDateTime = DateTime.Now;
 
             _postRepository.Insert(post);
+        }
+        private Blog ChooseBlog(string prompt = null)
+        {
+            if (prompt == null)
+            {
+                prompt = "Please choose a blog:";
+            }
+
+            Console.WriteLine(prompt);
+
+            List<Blog> blogs = _blogRepository.GetAll();
+
+            for (int i = 0; i < blogs.Count; i++)
+            {
+                Blog blog = blogs[i];
+                Console.WriteLine($" {i + 1}) {blog.ToString()}");
+            }
+            Console.Write("> ");
+
+            string input = Console.ReadLine();
+            try
+            {
+                int choice = int.Parse(input);
+                return blogs[choice - 1];
+            }
+            catch (Exception ex)
+            {
+                if (!string.IsNullOrWhiteSpace(input))
+                {
+                    Console.WriteLine("Invalid Choose");
+                }
+                return null;
+            }
         }
     }
 }
